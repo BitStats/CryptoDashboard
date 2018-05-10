@@ -1,16 +1,11 @@
 package mx.itam;
 
 import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -25,17 +20,16 @@ public class MainUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
-
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener(e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue()
-                    + ", it works!"));
-        });
-
-        layout.addComponents(name, button);
+        DataServices data = new DataServices();
+        Grid<DataHistorica> grid = new Grid<>();
+        grid.setItems(data.getData_interval());
+        grid.addColumn(DataHistorica::getDate).setCaption("Fecha");
+        grid.addColumn(DataHistorica::getOpenPrice).setCaption("Apertura");
+        grid.addColumn(DataHistorica::getClosePrice).setCaption("Cierre");
+        grid.addColumn(DataHistorica::getMaxPrice).setCaption("Maximo");
+        grid.addColumn(DataHistorica::getMinPrice).setCaption("Minimo");
+        grid.setWidth("100%");
+        layout.addComponents(grid);
 
         setContent(layout);
     }
