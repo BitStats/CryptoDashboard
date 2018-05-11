@@ -73,7 +73,12 @@ public class MainUI extends UI {
         gridsLayout.addComponents(infoGrid,actualPriceGrid);
         gridsLayout.setSizeFull();
         gridsLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        layout.addComponents(graph,new HorizontalLayout(lblActualPrice,btnUpdatePrices),gridsLayout);
+        HorizontalLayout priceButtons = new HorizontalLayout(lblActualPrice,btnUpdatePrices);
+        layout.addComponents(graph,priceButtons,gridsLayout);
+        priceButtons.setExpandRatio(lblActualPrice,.7f);
+        priceButtons.setExpandRatio(btnUpdatePrices,.3f);
+
+        priceButtons.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         graphId = layout.getComponentIndex(graph);
         infoGridId = gridsLayout.getComponentIndex(infoGrid);
         actualPriceGridId = gridsLayout.getComponentIndex(actualPriceGrid);
@@ -83,7 +88,7 @@ public class MainUI extends UI {
         setContent(layout);
     }
 
-    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @WebServlet(urlPatterns = "/*", name = "BitStats", asyncSupported = true)
     @VaadinServletConfiguration(ui = MainUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }

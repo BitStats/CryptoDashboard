@@ -15050,7 +15050,7 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 .body-bitstats{
-	padding-top: 4em !important;
+	padding-top: 5em !important;
 }
 .navbar-bitstats{
 	margin: 0 0 0 0 !important;
@@ -15062,6 +15062,7 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100% !important;
 	background-color: #333333 !important;
 	color: #dddddd !important;
+	z-index: 99999 !important;
 	padding-bottom: 1em;
 	padding-top: 1em;
 	padding-left: 1em;
