@@ -1,5 +1,4 @@
 package mx.itam.Frontend;
-import com.google.gwt.event.shared.HandlerManager;
 import com.vaadin.ui.VerticalLayout;
 import mx.itam.Backend.Symbol;
 import org.dussan.vaadin.dcharts.DCharts;
