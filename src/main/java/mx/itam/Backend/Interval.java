@@ -1,9 +1,14 @@
 package mx.itam.Backend;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Interval {
     private String timeCode;
     private String fullName;
     private long timeInMilis;
+    private final static Logger logger =
+            Logger.getLogger(Interval.class.getName());
 
     public long getTimeInMilis() {
         return timeInMilis;
@@ -13,6 +18,7 @@ public class Interval {
         this.timeCode = timeCode;
         this.fullName = beautyInterval(timeCode);
         this.timeInMilis = 1000*60*minutes + 1000*60*60*hour + 1000L*60*60*24*days;
+        logger.log(Level.INFO, "Creando intervalo:\t"+fullName);
     }
     public Interval(int timeInMilis){
         this.timeInMilis = timeInMilis;

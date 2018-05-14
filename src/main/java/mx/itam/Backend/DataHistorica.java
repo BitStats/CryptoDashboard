@@ -1,12 +1,11 @@
 package mx.itam.Backend;
 
-import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataHistorica {
     private long openTime;
@@ -15,6 +14,8 @@ public class DataHistorica {
     private double minPrice;
     private double closePrice;
     private Interval interval;
+    private final static Logger logger =
+            Logger.getLogger(DataHistorica.class.getName());
 
     public DataHistorica(long openTime, double openPrice, double maxPrice, double minPrice, double closePrice, Interval interval) {
         this.openTime = openTime;
@@ -23,6 +24,8 @@ public class DataHistorica {
         this.minPrice = minPrice;
         this.closePrice = closePrice;
         this.interval = interval;
+        logger.log(Level.INFO,"Guardando data de la fecha: "+beautyDate());
+
     }
 
     public static String getDateFromEpoch(long time){

@@ -15,7 +15,6 @@ public class NavigationBar extends HorizontalLayout {
         Label lblTitle = new Label("BitStats");
         Label lblSlogan = new Label("Donde las Criptomonedas están");
         ThemeResource resource = new ThemeResource("img/BitStats.png");
-
         Image image = new Image("",resource);
         image.setWidth(130, Unit.PIXELS);
         image.setHeight(30, Unit.PIXELS);

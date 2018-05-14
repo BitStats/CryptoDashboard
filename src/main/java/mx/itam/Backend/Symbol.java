@@ -1,13 +1,18 @@
 package mx.itam.Backend;
 
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Symbol implements Comparable {
+    private final static Logger logger =
+            Logger.getLogger(Symbol.class.getName());
     private String symbol;
     private String baseAsset;
     private String quoteAsset;
 
     public Symbol(String symbol, String baseAsset, String quoteAsset) {
+        logger.log(Level.INFO,"Leyendo Simbolo:\t"+symbol);
         this.symbol = symbol;
         this.baseAsset = baseAsset;
         this.quoteAsset = quoteAsset;

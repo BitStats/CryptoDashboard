@@ -12,7 +12,12 @@ import org.dussan.vaadin.dcharts.options.Highlighter;
 import org.dussan.vaadin.dcharts.options.Options;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Graphs extends VerticalLayout {
+    private final static Logger logger =
+            Logger.getLogger(Graphs.class.getName());
     public Graphs(Double[] data, String[] axis, Symbol symbol) {
         DataSeries dataSeries = new DataSeries()
                 .add(data);
@@ -33,12 +38,14 @@ public class Graphs extends VerticalLayout {
                 .setAxes(axes)
                 .setTitle(symbol.toString())
                 .setHighlighter(highlighter);
-        //Log cargando grafica
+        logger.log(Level.INFO,"Cargando la gráfica.");
         DCharts chart = new DCharts()
                 .setDataSeries(dataSeries)
                 .setOptions(options)
                 .show();
-        //Termino de cargar grafica
+
+        logger.log(Level.INFO,"La gráfica termino de cargarse.");
+
         this.addComponent(chart);
     }
 }
