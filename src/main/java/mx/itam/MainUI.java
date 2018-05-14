@@ -102,6 +102,7 @@ public class MainUI extends UI {
             layout.replaceComponent(layout.getComponent(graphId),regraph);
             graphId = layout.getComponentIndex(regraph);
             infoGridId = gridsLayout.getComponentIndex(grid);
+            lblActualPrice.setValue("Precio Actual: "+data.getActualData().getMaxPrice());
         } catch (IOException ex) {
             //Log de error aqui
             ex.printStackTrace();
