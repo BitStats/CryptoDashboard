@@ -3,6 +3,10 @@ package mx.itam.Backend;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * 
+ * @author BitStats
+ */
 public class Interval {
     private String timeCode;
     private String fullName;
@@ -10,27 +14,52 @@ public class Interval {
     private final static Logger logger =
             Logger.getLogger(Interval.class.getName());
 
+    /**
+     * 
+     * @return La duración del intervalo en milisegundos
+     */
     public long getTimeInMilis() {
         return timeInMilis;
     }
 
+    /**
+     * Método constructor
+     * @param timeCode código en el cual se mide el intervalo
+     * @param minutes cantidad de minutos
+     * @param hour cantidad de horas
+     * @param days cantidad de días
+     */
     public Interval(String timeCode, int minutes, int hour, int days) {
         this.timeCode = timeCode;
         this.fullName = beautyInterval(timeCode);
         this.timeInMilis = 1000*60*minutes + 1000*60*60*hour + 1000L*60*60*24*days;
         logger.log(Level.INFO, "Creando intervalo:\t"+fullName);
     }
+    
+    /**
+     * Método constructor
+     * @param timeInMilis 
+     */
     public Interval(int timeInMilis){
         this.timeInMilis = timeInMilis;
         this.timeCode = "1s";
         this.fullName = "1 segundo";
     }
 
+    /**
+     * 
+     * @return El período de tiempo en que se define el intervalo
+     */
     @Override
     public String toString() {
         return fullName;
     }
 
+    /**
+     * 
+     * @param st Intervalo a formatear
+     * @return El período de tiempo en que se mide el intervalo
+     */
     public String beautyInterval(String st){
         if(st.contains("m")){
             return st.replace("m"," - Minutos");
@@ -50,6 +79,10 @@ public class Interval {
         return st;
     }
 
+    /**
+     * 
+     * @return El código del tiempo
+     */
     public String getTimeCode() {
         return timeCode;
     }

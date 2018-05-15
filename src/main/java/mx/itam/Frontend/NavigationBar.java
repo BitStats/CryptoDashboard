@@ -10,7 +10,15 @@ import com.vaadin.ui.Label;
 
 import java.io.File;
 
+/**
+ * Clase para armar la Navigation Bar de la página web
+ * @author BitStats
+ */
 public class NavigationBar extends HorizontalLayout {
+    
+    /**
+     * Método constructor. Crea la navigation bar de la página con el nombre, slogan y logo
+     */
     public NavigationBar() {
         Label lblTitle = new Label("BitStats");
         Label lblSlogan = new Label("Donde las Criptomonedas están");
