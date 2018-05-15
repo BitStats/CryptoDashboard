@@ -12,6 +12,8 @@ import mx.itam.Frontend.Graphs;
 import mx.itam.Frontend.NavigationBar;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -21,6 +23,9 @@ import java.io.IOException;
  * overridden to add component to the user interface and initialize non-component functionality.
  */
 @Theme("mytheme")
+/**
+ * Clase que despliega la interfaz para el usuario
+ */
 public class MainUI extends UI {
     private int graphId;
     private int infoGridId;
@@ -28,6 +33,13 @@ public class MainUI extends UI {
     private Label lblActualPrice;
     private VerticalLayout layout;
     private HorizontalLayout gridsLayout;
+    
+    private final static Logger logger = Logger.getLogger(MainUI.class.getName());
+    
+    /**
+     * Inicializador de dependencias y todo lo necesario para comenzar
+     * @param vaadinRequest 
+     */
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         layout = new VerticalLayout(new NavigationBar());
@@ -45,6 +57,7 @@ public class MainUI extends UI {
             lblActualPrice.setValue("Precio Actual: "+data.getActualData().getMaxPrice());
         } catch (IOException e) {
             //Error de fetch precio.
+            logger.log(Level.SEVERE, "Ocurrió un error crítico inicializando la página", e);
         }
         Graphs graph;
         graphId = 0;
@@ -86,6 +99,7 @@ public class MainUI extends UI {
         gridsLayout.setExpandRatio(actualPriceGrid,.3f);
 
         setContent(layout);
+        logger.log(Level.INFO, "Se inicializó correctamente la página");
     }
 
     @WebServlet(urlPatterns = "/*", name = "BitStats", asyncSupported = true)
@@ -93,7 +107,12 @@ public class MainUI extends UI {
     public static class MyUIServlet extends VaadinServlet {
     }
 
+    /**
+     * Redespliega los precios actualizados en la gráfica
+     * @param data Los nuevos datos a graficar
+     */
     private void repaint(DataServices data){
+        logger.log(Level.INFO, "Recargando los precios para la gráfica");
         try {
             data.regenerateHistoricData();
             Graphs regraph = new Graphs(data.generateChartData(),data.generateChartAxis(),data.getSelectedSymbol());
@@ -102,25 +121,41 @@ public class MainUI extends UI {
             layout.replaceComponent(layout.getComponent(graphId),regraph);
             graphId = layout.getComponentIndex(regraph);
             infoGridId = gridsLayout.getComponentIndex(grid);
+            lblActualPrice.setValue("Precio Actual: "+data.getActualData().getMaxPrice());
+            logger.log(Level.INFO, "Se recargó correctamente");
         } catch (IOException ex) {
-            //Log de error aqui
+            logger.log(Level.SEVERE, "Ocurrió un error crítico con la API", ex);
             ex.printStackTrace();
         }
     }
+    
+    /**
+     * Rellena la tabla de precios con precios actualizados
+     * @param data Los nuevos precios
+     */
     private void updatePrices(DataServices data){
+        logger.log(Level.INFO, "Recargando los precios para la tabla");
         try {
             data.regenerateActualPrices();
             lblActualPrice.setValue("Precio Actual: "+data.getActualData().getMaxPrice());
             Grid<ActualPrice> grid = actualPriceGrid(data);
             gridsLayout.replaceComponent(gridsLayout.getComponent(actualPriceGridId),grid);
             actualPriceGridId = gridsLayout.getComponentIndex(grid);
-
+            logger.log(Level.INFO, "Se recargó correctamente");
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "Hubo un error crítico con la API", e);
             e.printStackTrace();
         }
 
     }
+    
+    /**
+     * 
+     * @param data Los datos a desplegar
+     * @return Tabla donde se despliegan los datos históricos
+     */
     private Grid<DataHistorica> infoGrid(DataServices data){
+        logger.log(Level.INFO, "Cargando datos históricos");
         Grid<DataHistorica> grid = new Grid<>();
         grid.setItems(data.getHistoricData());
         grid.addColumn(DataHistorica::beautyDate).setCaption("Fecha").setExpandRatio(20);
@@ -132,7 +167,14 @@ public class MainUI extends UI {
         grid.setCaption("Información de "+data.getSelectedSymbol().toString());
         return grid;
     }
+    
+    /**
+     * 
+     * @param data Los datos a desplegar
+     * @return Tabla donde se despliegan los datos actuales
+     */
     private Grid<ActualPrice> actualPriceGrid(DataServices data){
+        logger.log(Level.INFO, "Cargando datos actuales");
         Grid<ActualPrice> grid = new Grid<>();
         grid.setItems(data.getActualPrices());
         grid.addColumn(ActualPrice::getSymbol).setSortProperty("Moneda").setCaption("Moneda").setExpandRatio(4);
