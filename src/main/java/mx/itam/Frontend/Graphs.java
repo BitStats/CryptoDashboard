@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  * @author BitStats
  */
 public class Graphs extends VerticalLayout {
+	//Se instancia el logger que llevará la publicaciòn de logs.
     private final static Logger logger =
             Logger.getLogger(Graphs.class.getName());
     
@@ -30,6 +31,8 @@ public class Graphs extends VerticalLayout {
      * @param symbol Las monedas cuya comparación se va a graficar
      */
     public Graphs(Double[] data, String[] axis, Symbol symbol) {
+	//Se instancian los objetos necesarios para el display de las gráficas.
+	//Estos son los datos, los valores en los ejes y las especificaciones visuales.
         DataSeries dataSeries = new DataSeries()
                 .add(data);
         SeriesDefaults seriesDefaults = new SeriesDefaults()
@@ -44,12 +47,15 @@ public class Graphs extends VerticalLayout {
                                                 .add(axis)));
         Highlighter highlighter = new Highlighter()
                 .setShow(true);
+	//Se asignan estas especificaciones al objeto visual.
         Options options = new Options()
                 .setSeriesDefaults(seriesDefaults)
                 .setAxes(axes)
                 .setTitle(symbol.toString())
                 .setHighlighter(highlighter);
+	//Mensaje tipo log.
         logger.log(Level.INFO,"Cargando la gráfica.");
+	//Se despliega el resultado visual de la gráfica precargada.
         DCharts chart = new DCharts()
                 .setDataSeries(dataSeries)
                 .setOptions(options)

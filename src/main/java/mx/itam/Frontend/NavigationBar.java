@@ -20,12 +20,15 @@ public class NavigationBar extends HorizontalLayout {
      * Método constructor. Crea la navigation bar de la página con el nombre, slogan y logo
      */
     public NavigationBar() {
+	//Se instancian los compenentes visuales de la página asi como los textos que contienen.
         Label lblTitle = new Label("BitStats");
         Label lblSlogan = new Label("Donde las Criptomonedas están");
         ThemeResource resource = new ThemeResource("img/BitStats.png");
+	//Se asignan las especificaciones del tamaño de las imagenes.
         Image image = new Image("",resource);
         image.setWidth(130, Unit.PIXELS);
         image.setHeight(30, Unit.PIXELS);
+	//Se añaden los componentes para ser visualizados en el resultado final.
         addComponents(image,lblSlogan);
         this.setComponentAlignment(image,Alignment.BOTTOM_LEFT);
         this.setComponentAlignment(lblSlogan, Alignment.BOTTOM_RIGHT);
