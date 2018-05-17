@@ -9,6 +9,7 @@ import java.util.logging.Logger;
  * @author BitStats
  */
 public class Symbol implements Comparable {
+	//Se instancian las variables globales del sistema.
     private final static Logger logger =
             Logger.getLogger(Symbol.class.getName());
     private String symbol;
@@ -22,12 +23,13 @@ public class Symbol implements Comparable {
      * @param quoteAsset 
      */
     public Symbol(String symbol, String baseAsset, String quoteAsset) {
+	//Se manda un comentario log y ademàs se instancian las variables globales de la clase.
         logger.log(Level.INFO,"Leyendo Simbolo:\t"+symbol);
         this.symbol = symbol;
         this.baseAsset = baseAsset;
         this.quoteAsset = quoteAsset;
     }
-
+	//Métodos get de la clase.
     /**
      * 
      * @return Las monedas a comparar
@@ -51,6 +53,7 @@ public class Symbol implements Comparable {
     public String getQuoteAsset() {
         return quoteAsset;
     }
+	//Método por asi decirlo set que modifica una de las variables globales(symbol).
 
     /**
      * Establece symbol como el valor de entrada
@@ -68,7 +71,8 @@ public class Symbol implements Comparable {
     public String toString() {
         return baseAsset+"\\"+quoteAsset;
     }
-
+	//Métodos que deben estar definidos en cualquier buena clase de Java, es decir, equal,
+	//compareTo y un hash.
     /**
      * 
      * @param o Objeto a comparar con symbol
@@ -76,8 +80,10 @@ public class Symbol implements Comparable {
      */
     @Override
     public boolean equals(Object o) {
+	//Se compara el objeto intanciado con otro.
         if (this == o) return true;
         if (!(o instanceof Symbol)) return false;
+	//Se devuelve verdadero en caso de que los objetos sean del mismo simbolo.
         Symbol symbol1 = (Symbol) o;
         return Objects.equals(symbol, symbol1.symbol);
     }
