@@ -1,52 +1,23 @@
 CryptoDashboard
 ==============
 
-Template for a simple Vaadin application that only requires a Servlet 3.0 container to run.
+El CryptoDashboard de **BitStats** es un tablero que sirve para dar seguimiento a las criptomonedas de forma gráfica y en tiempo real.
 
-
-Workflow
+Implementación
 ========
+Se utilizan varias dependencias para aprovechar el API de https://binance.com/, las más importantes son:
+- **Vaadin 8**: Un framework que sirve para toda la parte del *Frontend*. Permite diseñar GUI en Java para Web usando GTW de Google (https://vaadin.com).
+- **OKHTTP3**: Es una librería que sirve para hacer las llamadas via REST por el protocolo HTTP/S, usada en el *Backend* para obtener la información desde el servidor de Binance.
+- **dGraph**: Es una librería que funciona de adaptador entre jqPlot (http://www.jqplot.com) y los Components de Vaadin, para hacer gráficas del *Frontend*.
+- **JSON**: Es la librería que nos permite leer el JSON que regresa el API de Binance y manipular la información dentro del *Backend*.
 
-To compile the entire project, run "mvn install".
+Correr el proyecto
+========
+Para compilar el proyecto completo, ejecute `mvn install`
 
-To run the application, run "mvn jetty:run" and open http://localhost:8080/ .
+Para correr la aplicación, ejecute `mvn jetty:run` y abra en el explorador: http://localhost:8080/ .
 
-To produce a deployable production mode WAR:
-- change productionMode to true in the servlet class configuration (nested in the UI class)
-- run "mvn clean package"
-- test the war file with "mvn jetty:run-war"
-
-Client-Side compilation
--------------------------
-
-The generated maven project is using an automatically generated widgetset by default. 
-When you add a dependency that needs client-side compilation, the maven plugin will 
-automatically generate it for you. Your own client-side customizations can be added into
-package "client".
-
-Debugging client side code
-  - run "mvn vaadin:run-codeserver" on a separate console while the application is running
-  - activate Super Dev Mode in the debug window of the application
-
-Developing a theme using the runtime compiler
--------------------------
-
-When developing the theme, Vaadin can be configured to compile the SASS based
-theme at runtime in the server. This way you can just modify the scss files in
-your IDE and reload the browser to see changes.
-
-To use the runtime compilation, open pom.xml and comment out the compile-theme 
-goal from vaadin-maven-plugin configuration. To remove a possibly existing 
-pre-compiled theme, run "mvn clean package" once.
-
-When using the runtime compiler, running the application in the "run" mode 
-(rather than in "debug" mode) can speed up consecutive theme compilations
-significantly.
-
-It is highly recommended to disable runtime compilation for production WAR files.
-
-Using Vaadin pre-releases
--------------------------
-
-If Vaadin pre-releases are not enabled by default, use the Maven parameter
-"-P vaadin-prerelease" or change the activation default value of the profile in pom.xml .
+Para poducir un WAR para hacer el deploy:
+- cambie **productionMode** a *true* en la configuración de la clase **servlet**, que se encuentra dentro de la clase MainUI)
+- Ejecute `mvn clean package` para compilar y crear el WAR
+- Para correrlo sobre el servidor de Jetty use:  `mvn jetty:run-war`
