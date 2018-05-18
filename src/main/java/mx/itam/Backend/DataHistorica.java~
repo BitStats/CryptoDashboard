@@ -12,9 +12,6 @@ import java.util.logging.Logger;
  * @author BitStats
  */
 public class DataHistorica {
-	
-	//Se instancian variables globales así como el objeto que 
-	//que llevará el registro de los logs.
     private long openTime;
     private double openPrice;
     private double maxPrice;
@@ -58,7 +55,6 @@ public class DataHistorica {
      * @return La fecha de los datos historicos en formato
      */
     public String beautyDate(){
-	//Se estandariza el formato de las fechas.
        if(interval.getTimeCode().contains("m")){
            return new SimpleDateFormat("HH:mm:ss").format(new Date(openTime));
        }
@@ -73,7 +69,7 @@ public class DataHistorica {
        }
        return "";
     }
-    //Getters.
+    
     /**
      * 
      * @return Momento en que comienza el intervalo
@@ -161,7 +157,7 @@ public class DataHistorica {
         formatter.setMinimumFractionDigits(10);
         return formatter.format(minPrice);
     }
-    //Método toString().
+    
     /**
      * 
      * @return String conteniendo los datos históricos de la moneda en el intervalo
