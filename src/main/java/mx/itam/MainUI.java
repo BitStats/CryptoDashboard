@@ -48,6 +48,7 @@ public class MainUI extends UI {
         DataServices data = new DataServices();
         ComboBox<Interval> cmbInterval = new ComboBox<>("Periodo:");
         ComboBox<Symbol> cmbSymbol = new ComboBox<>("Monedas:");
+        ComboBox<Integer> cmbLimites = new ComboBox<>("Limite:");
         Button btnUpdatePrices = new Button("Actualizar precios");
         btnUpdatePrices.addClickListener(e->{
            updatePrices(data);
@@ -66,10 +67,13 @@ public class MainUI extends UI {
         graph = new Graphs(data.generateChartData(),data.generateChartAxis(),data.getSelectedSymbol());
         cmbSymbol.setItems(data.getSymbols());
         cmbInterval.setItems(data.getIntervals());
+        cmbLimites.setItems(data.getLimitList());
+        cmbLimites.setEmptySelectionAllowed(false);
         cmbSymbol.setEmptySelectionAllowed(false);
         cmbInterval.setEmptySelectionAllowed(false);
         cmbSymbol.setSelectedItem(data.getSelectedSymbol());
         cmbInterval.setSelectedItem(data.getSelectedInterval());
+        cmbLimites.setSelectedItem(data.getSelectedLimit());
         cmbSymbol.addValueChangeListener(e->{
            data.setSelectedSymbol(cmbSymbol.getSelectedItem().get());
            repaint(data);
@@ -78,9 +82,13 @@ public class MainUI extends UI {
            data.setSelectedInterval(cmbInterval.getSelectedItem().get());
            repaint(data);
         });
+        cmbLimites.addValueChangeListener(e->{
+            data.setSelectedLimit(cmbLimites.getSelectedItem().get());
+            repaint(data);
+        });
         Grid<DataHistorica> infoGrid = infoGrid(data);
         Grid<ActualPrice> actualPriceGrid = actualPriceGrid(data);
-        HorizontalLayout optionBar = new HorizontalLayout(cmbInterval,cmbSymbol);
+        HorizontalLayout optionBar = new HorizontalLayout(cmbInterval,cmbSymbol,cmbLimites);
         optionBar.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         layout.addComponents(optionBar);
         gridsLayout.addComponents(infoGrid,actualPriceGrid);

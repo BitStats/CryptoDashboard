@@ -40,15 +40,7 @@ public class DataHistorica {
         logger.log(Level.INFO,"Guardando data de la fecha: "+beautyDate());
 
     }
-    
-    /**
-     * 
-     * @param time Un momento en fecha UNIX
-     * @return La fecha UNIX convertida a formato dd/MM/yyyy
-     */
-    public static String getDateFromEpoch(long time){
-       return new SimpleDateFormat("dd/MM/yyyy").format(new Date(time));
-    }
+
     
     /**
      * Método para regresar una fecha dada en un formato consistente
@@ -83,7 +75,7 @@ public class DataHistorica {
      * @return Fecha formateada
      */   
     public String getDate(){
-        return getDateFromEpoch(openTime);
+        return Utils.getDateFromEpoch(openTime);
     }
     
     /**
@@ -123,9 +115,7 @@ public class DataHistorica {
      * @return Precio al principio del intervalo en formato de moneda
      */
     public String getOpenPriceBeauty(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        formatter.setMinimumFractionDigits(10);
-        return formatter.format(openPrice);
+        return Utils.currencyFormat(openPrice,10);
     }
     
     /**
@@ -133,9 +123,7 @@ public class DataHistorica {
      * @return Precio al cierre del intervalo en formato de moneda
      */
     public String getClosePriceBeauty(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        formatter.setMinimumFractionDigits(10);
-        return formatter.format(closePrice);
+        return Utils.currencyFormat(closePrice,10);
     }
     
     /**
@@ -143,9 +131,7 @@ public class DataHistorica {
      * @return Precio máximo durante el intervalo en formato de moneda
      */
     public String getMaxPriceBeauty(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        formatter.setMinimumFractionDigits(10);
-        return formatter.format(maxPrice);
+        return Utils.currencyFormat(maxPrice,10);
     }
     
     /**
@@ -153,9 +139,7 @@ public class DataHistorica {
      * @return Precio mínimo durante el intervalo en formato de moneda
      */
     public String getMinPriceBeauty(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        formatter.setMinimumFractionDigits(10);
-        return formatter.format(minPrice);
+        return Utils.currencyFormat(minPrice,10);
     }
     
     /**
@@ -165,7 +149,7 @@ public class DataHistorica {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Open Time: ").append(getDateFromEpoch(openTime)).append("\tOpen Price: ").append(openPrice);
+        sb.append("Open Time: ").append(Utils.getDateFromEpoch(openTime)).append("\tOpen Price: ").append(openPrice);
         sb.append("\tMax Price: ").append(maxPrice).append("\tMin Price: ").append(minPrice);
         sb.append("\tClose Price: ").append(closePrice);
         return sb.toString();

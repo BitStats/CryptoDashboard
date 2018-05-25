@@ -24,7 +24,8 @@ public class DataServices {
     private Symbol selectedSymbol;
     private Interval selectedInterval;
     private DataHistorica actualData;
-    private int limit;
+    private int selectedLimit;
+    private ArrayList<Integer> limitList;
 
     private final static Logger logger =
             Logger.getLogger(DataServices.class.getName());
@@ -33,18 +34,20 @@ public class DataServices {
      * Método constructor de la clase
      */
     public DataServices(){
+
         logger.log(Level.INFO,"Recargando la información");
         symbols = new ArrayList<>();
         actualPrices = new ArrayList<>();
         try{
             fetchSymbols();
             fetchIntervals();
+            fetchLimits();
             Collections.sort(symbols);
             int index = symbols.indexOf(new Symbol("BTCUSDT"));
             selectedSymbol = symbols.get(index);
             selectedInterval = intervals.get(10);
-            limit = 15;
-            fetchHistoricData(selectedSymbol,selectedInterval,limit);
+            selectedLimit = limitList.get(0);
+            fetchHistoricData(selectedSymbol,selectedInterval, selectedLimit);
             fetchActualData(selectedSymbol);
             fetchActualPrices();
             logger.log(Level.INFO,"Se cargo la información");
@@ -100,7 +103,17 @@ public class DataServices {
         intervals.add(new Interval("1M",0,0,30));
         logger.log(Level.INFO,"Se cargaron los intervalos");
     }
-    
+
+    /**
+     * Genera un ArrayList de limites.
+     */
+    private void fetchLimits(){
+        limitList = new ArrayList<>();
+        limitList.add(15);
+        limitList.add(20);
+        limitList.add(25);
+        logger.log(Level.INFO,"Se cargaron los limites");
+    }
     /**
      * Genera y guarda los datos históricos
      * @param symbol La moneda a trabajar
@@ -111,7 +124,7 @@ public class DataServices {
     private void fetchHistoricData(Symbol symbol, Interval interval, int limit) throws java.io.IOException{
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(ENDPOINT+"api/v1/klines?symbol="+symbol.getSymbol()+"&interval="+interval.getTimeCode()+"&startTime="+calculateTimeLapseInMilis(interval,limit)+"&limit="+limit)
+                .url(ENDPOINT+"api/v1/klines?symbol="+symbol.getSymbol()+"&interval="+interval.getTimeCode()+"&startTime="+calculateTimeLapseInMilis(interval,limit)+"&limit="+selectedLimit)
                 .get()
                 .build();
         Response response = client.newCall(request).execute();
@@ -224,12 +237,12 @@ public class DataServices {
     }
     
     /**
-     * Carga los valores actualizados del método fetchHistoricData(selectedSymbol, selectedInterval, limit)
+     * Carga los valores actualizados del método fetchHistoricData(selectedSymbol, selectedInterval, selectedLimit)
      * @throws java.io.IOException 
      */
     public void regenerateHistoricData() throws java.io.IOException{
         logger.log(Level.INFO,"Recargando la información historica.");
-        fetchHistoricData(selectedSymbol,selectedInterval,limit);
+        fetchHistoricData(selectedSymbol,selectedInterval, selectedLimit);
         fetchActualData(selectedSymbol);
 
     }
@@ -266,7 +279,15 @@ public class DataServices {
     public ArrayList<Interval> getIntervals() {
         return intervals;
     }
-    
+
+    /**
+     *
+     * @return Arreglo que contiene los limites
+     */
+    public ArrayList<Integer> getLimitList() {
+        return limitList;
+    }
+
     /**
      * 
      * @return El símbolo seleccionado
@@ -301,6 +322,13 @@ public class DataServices {
         return actualPrices;
     }
 
+    /**
+     *
+     * @return el limite seleccionado
+     */
+    public int getSelectedLimit() {
+        return selectedLimit;
+    }
     //Aux Functions
     /**
      *  
@@ -330,11 +358,11 @@ public class DataServices {
     }
     
     /**
-     * Establece limit como el valor de entrada
-     * @param limit El límite necesario para trabajar con la API
+     * Establece selectedLimit como el valor de entrada
+     * @param selectedLimit El límite necesario para trabajar con la API
      */
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public void setSelectedLimit(int selectedLimit) {
+        this.selectedLimit = selectedLimit;
     }
 }
 

@@ -47,8 +47,6 @@ public class ActualPrice {
      * @return El precio de la moneda en el formato de moneda $xxxx.xx
      */
     public String currencyFormat(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        formatter.setMinimumFractionDigits(10); //Especifica 10 como la cantidad mínima de dígitos fraccionarios
-        return formatter.format(price);
+        return Utils.currencyFormat(price,10);
     }
 }

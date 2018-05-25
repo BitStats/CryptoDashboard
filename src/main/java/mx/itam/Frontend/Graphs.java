@@ -42,6 +42,7 @@ public class Graphs extends VerticalLayout {
                         new XYaxis()
                                 .setLabel("Periodos")
                                 .setRenderer(AxisRenderers.CATEGORY)
+                                .setDrawMinorTickMarks(true)
                                 .setTicks(
                                         new Ticks()
                                                 .add(axis)));
