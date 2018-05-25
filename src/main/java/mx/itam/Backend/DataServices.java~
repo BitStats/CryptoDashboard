@@ -16,8 +16,6 @@ import java.util.logging.Logger;
  * @author BitStats
  */
 public class DataServices {
-	//Se instancian las variables globales, las cuales serviran 
-	//para manejar los datos y las conexiones con las bases de 	//datos así como el objeto logger.
     private final static String ENDPOINT = "https://api.binance.com/";
     private ArrayList<Symbol> symbols;
     private ArrayList<Interval> intervals;
@@ -26,8 +24,7 @@ public class DataServices {
     private Symbol selectedSymbol;
     private Interval selectedInterval;
     private DataHistorica actualData;
-    private int selectedLimit;
-    private ArrayList<Integer> limitList;
+    private int limit;
 
     private final static Logger logger =
             Logger.getLogger(DataServices.class.getName());
@@ -36,22 +33,18 @@ public class DataServices {
      * Método constructor de la clase
      */
     public DataServices(){
-
         logger.log(Level.INFO,"Recargando la información");
         symbols = new ArrayList<>();
         actualPrices = new ArrayList<>();
-	//Aquí se envuelven las consultas en un try catch para poder manejar las excepciones.
         try{
             fetchSymbols();
             fetchIntervals();
-            fetchLimits();
             Collections.sort(symbols);
-		//Se preparan los parámetros para las consultas.
             int index = symbols.indexOf(new Symbol("BTCUSDT"));
             selectedSymbol = symbols.get(index);
             selectedInterval = intervals.get(10);
-            selectedLimit = limitList.get(0);
-            fetchHistoricData(selectedSymbol,selectedInterval, selectedLimit);
+            limit = 15;
+            fetchHistoricData(selectedSymbol,selectedInterval,limit);
             fetchActualData(selectedSymbol);
             fetchActualPrices();
             logger.log(Level.INFO,"Se cargo la información");
@@ -67,18 +60,15 @@ public class DataServices {
      * @throws java.io.IOException 
      */
     private void fetchSymbols() throws java.io.IOException{
-	//Se declara un cliente http.
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(ENDPOINT+"api/v1/exchangeInfo")
                 .get()
                 .build();
         Response response = client.newCall(request).execute();
-	//Se verifica que la consulta haya sido correcta en formato 		//Json.
         if(response.isSuccessful()) {
             JSONObject jsonResponse = new JSONObject(response.body().string());
             JSONArray symbolArray=jsonResponse.getJSONArray("symbols");
-		//Se cargan cada uno de los símbolos consultados.
             for(int i=0; i< symbolArray.length();i++){
                 JSONObject symbolObj = symbolArray.getJSONObject(i);
                 symbols.add(new Symbol(symbolObj.getString("symbol"),symbolObj.getString("baseAsset"),symbolObj.getString("quoteAsset")));
@@ -95,7 +85,6 @@ public class DataServices {
      * Genera un ArrayList de intervalos
      */
     private void fetchIntervals(){
-	//Se cargan los valores predeterminados de intervalos.
         intervals = new ArrayList<>();
         intervals.add(new Interval("1m",1,0,0));
         intervals.add(new Interval("3m",3,0,0));
@@ -111,17 +100,7 @@ public class DataServices {
         intervals.add(new Interval("1M",0,0,30));
         logger.log(Level.INFO,"Se cargaron los intervalos");
     }
-
-    /**
-     * Genera un ArrayList de limites.
-     */
-    private void fetchLimits(){
-        limitList = new ArrayList<>();
-        limitList.add(15);
-        limitList.add(20);
-        limitList.add(25);
-        logger.log(Level.INFO,"Se cargaron los limites");
-    }
+    
     /**
      * Genera y guarda los datos históricos
      * @param symbol La moneda a trabajar
@@ -130,16 +109,12 @@ public class DataServices {
      * @throws java.io.IOException 
      */
     private void fetchHistoricData(Symbol symbol, Interval interval, int limit) throws java.io.IOException{
-	//Se instancia un cliente http que se encargará de la consulta.
         OkHttpClient client = new OkHttpClient();
-	//Se hace la consulta.
         Request request = new Request.Builder()
-                .url(ENDPOINT+"api/v1/klines?symbol="+symbol.getSymbol()+"&interval="+interval.getTimeCode()+"&startTime="+calculateTimeLapseInMilis(interval,limit)+"&limit="+selectedLimit)
+                .url(ENDPOINT+"api/v1/klines?symbol="+symbol.getSymbol()+"&interval="+interval.getTimeCode()+"&startTime="+calculateTimeLapseInMilis(interval,limit)+"&limit="+limit)
                 .get()
                 .build();
         Response response = client.newCall(request).execute();
-	//SE verifica que la consulta haya sido exitosa y se formatea 
-	//el objeto JSON con los datos.
         if(response.isSuccessful()){
             historicData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(response.body().string());
@@ -159,16 +134,12 @@ public class DataServices {
      * @throws java.io.IOException 
      */
     private void fetchActualData(Symbol symbol) throws java.io.IOException{
-	//Se declara un cliente http encargado de hacer la consulta.
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(ENDPOINT+"api/v3/ticker/price?symbol="+symbol.getSymbol())
                 .get()
                 .build();
-	//Se ejecuta la consulta.
         Response response = client.newCall(request).execute();
-	//Se verifica que la consulta haya sido exitosa y se formatean 		//los datos recibidos. Se mantiene el progreso por medio de 
-	//logs.
         if(response.isSuccessful()){
                 JSONObject jsonObject = new JSONObject(response.body().string());
                 double price =jsonObject.getDouble("price");
@@ -184,16 +155,12 @@ public class DataServices {
      * @throws java.io.IOException 
      */
     private void fetchActualPrices() throws java.io.IOException{
-	//Se instancia un cliente http que hará las consultas.
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(ENDPOINT+"api/v3/ticker/price")
                     .get()
                     .build();
-	//Se hace la consulta.
             Response response = client.newCall(request).execute();
-	//Se verifica que los datos hayan sido recibidos correctamente
-	// se les formatea y además se mantiene un log.
             if(response.isSuccessful()){
                 JSONArray jsonArray = new JSONArray(response.body().string());
                 for(int i=0;i<jsonArray.length();i++){
@@ -222,16 +189,12 @@ public class DataServices {
      * @return Arreglo que contiene los datos históricos
      */
     public Double[] generateChartData(){
-	//Se cargan los datos en una tabla para posteriormente
-	// graficamente si es que fueron cargados correctamente.
         if(historicData == null || historicData.isEmpty()){
             logger.log(Level.SEVERE,"No hay información para cargar.");
             return null;
 
         }else{
             Double[] data_double = new Double[historicData.size()];
-	//Mediante un for se recorren los datos y son cargados en su
-	//Posición correcta.
             for(int i = 0; i< data_double.length;i++){
                 data_double[i] = historicData.get(i).getClosePrice();
             }
@@ -245,15 +208,11 @@ public class DataServices {
      * @return Arreglo que contiene las fechas de los datos históricos
      */
     public String[] generateChartAxis(){
-	//Se verifica que haya información precargada en las variables 
-	//globales.
         if(historicData == null || historicData.isEmpty()){
             logger.log(Level.SEVERE,"No hay información para cargar.");
             return null;
 
         }else{
-	//Se recorren los valores de información de los ejes y se 
-	//preparan para su posterior despliegue gráfico.
             String[] data_string = new String[historicData.size()];
             for(int i = 0; i< data_string.length;i++){
                 data_string[i] = historicData.get(i).beautyDate();
@@ -265,12 +224,12 @@ public class DataServices {
     }
     
     /**
-     * Carga los valores actualizados del método fetchHistoricData(selectedSymbol, selectedInterval, selectedLimit)
+     * Carga los valores actualizados del método fetchHistoricData(selectedSymbol, selectedInterval, limit)
      * @throws java.io.IOException 
      */
     public void regenerateHistoricData() throws java.io.IOException{
         logger.log(Level.INFO,"Recargando la información historica.");
-        fetchHistoricData(selectedSymbol,selectedInterval, selectedLimit);
+        fetchHistoricData(selectedSymbol,selectedInterval,limit);
         fetchActualData(selectedSymbol);
 
     }
@@ -283,8 +242,7 @@ public class DataServices {
         logger.log(Level.INFO,"Recargando la información de precios actuales.");
         fetchActualPrices();
     }
-    // A partir de aquí comienzan los Getters, Setters y una función 
-	//auxiliar.
+    // Getters
     /**
      * 
      * @return Arreglo que contiene los datos históricos
@@ -308,15 +266,7 @@ public class DataServices {
     public ArrayList<Interval> getIntervals() {
         return intervals;
     }
-
-    /**
-     *
-     * @return Arreglo que contiene los limites
-     */
-    public ArrayList<Integer> getLimitList() {
-        return limitList;
-    }
-
+    
     /**
      * 
      * @return El símbolo seleccionado
@@ -351,13 +301,6 @@ public class DataServices {
         return actualPrices;
     }
 
-    /**
-     *
-     * @return el limite seleccionado
-     */
-    public int getSelectedLimit() {
-        return selectedLimit;
-    }
     //Aux Functions
     /**
      *  
@@ -387,11 +330,11 @@ public class DataServices {
     }
     
     /**
-     * Establece selectedLimit como el valor de entrada
-     * @param selectedLimit El límite necesario para trabajar con la API
+     * Establece limit como el valor de entrada
+     * @param limit El límite necesario para trabajar con la API
      */
-    public void setSelectedLimit(int selectedLimit) {
-        this.selectedLimit = selectedLimit;
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }
 

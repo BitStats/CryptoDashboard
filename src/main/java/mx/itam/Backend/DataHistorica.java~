@@ -12,9 +12,6 @@ import java.util.logging.Logger;
  * @author BitStats
  */
 public class DataHistorica {
-	
-	//Se instancian variables globales así como el objeto que 
-	//que llevará el registro de los logs.
     private long openTime;
     private double openPrice;
     private double maxPrice;
@@ -43,14 +40,21 @@ public class DataHistorica {
         logger.log(Level.INFO,"Guardando data de la fecha: "+beautyDate());
 
     }
-
+    
+    /**
+     * 
+     * @param time Un momento en fecha UNIX
+     * @return La fecha UNIX convertida a formato dd/MM/yyyy
+     */
+    public static String getDateFromEpoch(long time){
+       return new SimpleDateFormat("dd/MM/yyyy").format(new Date(time));
+    }
     
     /**
      * Método para regresar una fecha dada en un formato consistente
      * @return La fecha de los datos historicos en formato
      */
     public String beautyDate(){
-	//Se estandariza el formato de las fechas.
        if(interval.getTimeCode().contains("m")){
            return new SimpleDateFormat("HH:mm:ss").format(new Date(openTime));
        }
@@ -65,7 +69,7 @@ public class DataHistorica {
        }
        return "";
     }
-    //Getters.
+    
     /**
      * 
      * @return Momento en que comienza el intervalo
@@ -79,7 +83,7 @@ public class DataHistorica {
      * @return Fecha formateada
      */   
     public String getDate(){
-        return Utils.getDateFromEpoch(openTime);
+        return getDateFromEpoch(openTime);
     }
     
     /**
@@ -119,7 +123,9 @@ public class DataHistorica {
      * @return Precio al principio del intervalo en formato de moneda
      */
     public String getOpenPriceBeauty(){
-        return Utils.currencyFormat(openPrice,10);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        formatter.setMinimumFractionDigits(10);
+        return formatter.format(openPrice);
     }
     
     /**
@@ -127,7 +133,9 @@ public class DataHistorica {
      * @return Precio al cierre del intervalo en formato de moneda
      */
     public String getClosePriceBeauty(){
-        return Utils.currencyFormat(closePrice,10);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        formatter.setMinimumFractionDigits(10);
+        return formatter.format(closePrice);
     }
     
     /**
@@ -135,7 +143,9 @@ public class DataHistorica {
      * @return Precio máximo durante el intervalo en formato de moneda
      */
     public String getMaxPriceBeauty(){
-        return Utils.currencyFormat(maxPrice,10);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        formatter.setMinimumFractionDigits(10);
+        return formatter.format(maxPrice);
     }
     
     /**
@@ -143,9 +153,11 @@ public class DataHistorica {
      * @return Precio mínimo durante el intervalo en formato de moneda
      */
     public String getMinPriceBeauty(){
-        return Utils.currencyFormat(minPrice,10);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        formatter.setMinimumFractionDigits(10);
+        return formatter.format(minPrice);
     }
-    //Método toString().
+    
     /**
      * 
      * @return String conteniendo los datos históricos de la moneda en el intervalo
@@ -153,7 +165,7 @@ public class DataHistorica {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Open Time: ").append(Utils.getDateFromEpoch(openTime)).append("\tOpen Price: ").append(openPrice);
+        sb.append("Open Time: ").append(getDateFromEpoch(openTime)).append("\tOpen Price: ").append(openPrice);
         sb.append("\tMax Price: ").append(maxPrice).append("\tMin Price: ").append(minPrice);
         sb.append("\tClose Price: ").append(closePrice);
         return sb.toString();
