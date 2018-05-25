@@ -25,4 +25,12 @@ class Utils {
     public static String getDateFromEpoch(long time) {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date(time));
     }
+    /**
+     * @param interval
+     * @param limit
+     * @return El tiempo transcurrido, en milisegundos, desde el inicio del intervalo hasta el momento actual en formato para la API
+     */
+    public static long calculateTimeLapseInMilis(Interval interval, int limit) {
+        return System.currentTimeMillis() - interval.getTimeInMilis() * limit;
+    }
 }

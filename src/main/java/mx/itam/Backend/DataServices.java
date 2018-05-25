@@ -139,7 +139,7 @@ public class DataServices {
         OkHttpClient client = new OkHttpClient();
         //Se hace la consulta.
         Request request = new Request.Builder()
-                .url(ENDPOINT + "api/v1/klines?symbol=" + symbol.getSymbol() + "&interval=" + interval.getTimeCode() + "&startTime=" + calculateTimeLapseInMilis(interval, limit) + "&limit=" + selectedLimit)
+                .url(ENDPOINT + "api/v1/klines?symbol=" + symbol.getSymbol() + "&interval=" + interval.getTimeCode() + "&startTime=" +Utils.calculateTimeLapseInMilis(interval, limit) + "&limit=" + selectedLimit)
                 .get()
                 .build();
         Response response = client.newCall(request).execute();
@@ -389,13 +389,5 @@ public class DataServices {
         this.selectedLimit = selectedLimit;
     }
 
-    /**
-     * @param interval
-     * @param limit
-     * @return El tiempo transcurrido, en milisegundos, desde el inicio del intervalo hasta el momento actual en formato para la API
-     */
-    private long calculateTimeLapseInMilis(Interval interval, int limit) {
-        return System.currentTimeMillis() - interval.getTimeInMilis() * limit;
-    }
 }
 

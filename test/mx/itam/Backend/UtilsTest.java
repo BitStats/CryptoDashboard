@@ -19,4 +19,15 @@ public class UtilsTest {
         long timeInMilis = 0;
         assertEquals("Fecha",Utils.getDateFromEpoch(timeInMilis));
     }
+
+    @Test
+    public void calculateTimeLapseInMilis() {
+        long tiempo=0;
+        int limit = 1;
+        int min = 1;
+        int hour = 1;
+        int day = 1;
+
+        assertEquals(tiempo,Utils.calculateTimeLapseInMilis(new Interval("x",min,hour,day),limit));
+    }
 }
