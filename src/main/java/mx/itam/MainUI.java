@@ -25,8 +25,7 @@ import java.util.logging.Logger;
 @Theme("mytheme")
 /**
  * Clase que despliega la interfaz para el usuario
- */
-public class MainUI extends UI {
+ */ class MainUI extends UI {
     private int graphId;
     private int infoGridId;
     private int actualPriceGridId;
@@ -50,9 +49,7 @@ public class MainUI extends UI {
         ComboBox<Symbol> cmbSymbol = new ComboBox<>("Monedas:");
         ComboBox<Integer> cmbLimites = new ComboBox<>("Limite:");
         Button btnUpdatePrices = new Button("Actualizar precios");
-        btnUpdatePrices.addClickListener(e->{
-           updatePrices(data);
-        });
+        btnUpdatePrices.addClickListener(e-> updatePrices(data));
         lblActualPrice = new Label("Precio Actual: ");
         try {
             lblActualPrice.setValue("Precio Actual: "+data.getActualData().getMaxPrice());
