@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 @Theme("mytheme")
 /**
  * Clase que despliega la interfaz para el usuario
- */ class MainUI extends UI {
+ */ public class MainUI extends UI {
     private int graphId;
     private int infoGridId;
     private int actualPriceGridId;
