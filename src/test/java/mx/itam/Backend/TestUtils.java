@@ -4,17 +4,37 @@ import mx.itam.Backend.Interval;
 import mx.itam.Backend.Utils;
 import org.junit.Assert;
 import org.junit.Test;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 import static org.junit.Assert.*;
 
 public class TestUtils {
+    private final static Logger logger =
+            Logger.getLogger(TestUtils.class.getName());
+    @Test
+    public void testCurrencyFormatOne() {
+        double decimalNumber = 3.1415926535;
+        int decimals = 4;
+        //logger.log(Level.INFO, Utils.currencyFormat(decimalNumber, decimals));
+        assert(Utils.currencyFormat(decimalNumber, decimals).equals("$3.1416"));
+    }
 
     @Test
-    public void currencyFormat() {
-        double decimalNumber = 0.0;
-        int decimals = 7;
-        //Assert.assertEquals("0.00000000", Utils.currencyFormat(decimalNumber,decimals));
-        assertEquals(true,true);
+    public void testCurrencyFormatTwo() {
+        double decimalNumber = 123456;
+        int decimals = 5;
+        //logger.log(Level.INFO, Utils.currencyFormat(decimalNumber, decimals));
+        assert(Utils.currencyFormat(decimalNumber, decimals).equals("$123,456.00000"));
+    }
+
+    @Test
+    public void testCurrencyFormatThree() {
+        double decimalNumber = 0.35;
+        int decimals = 2;
+        //logger.log(Level.INFO, Utils.currencyFormat(decimalNumber, decimals));
+        assert(Utils.currencyFormat(decimalNumber, decimals).equals("$0.35"));
     }
 
     @Test
