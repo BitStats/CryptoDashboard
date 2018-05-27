@@ -35,13 +35,13 @@ public class TestUtils {
     @Test
     public void getDateFromEpochOne() {
         long timeInMillis = 0;
-        assertEquals("31/12/1969",Utils.getDateFromEpoch(timeInMillis));
+        assertEquals("01/01/1970",Utils.getDateFromEpoch(timeInMillis));
     }
 
     @Test
     public void getDateFromEpochTwo() {
         long timeInMillis = 1527395165000L;
-        assertEquals("26/05/2018",Utils.getDateFromEpoch(timeInMillis));
+        assertEquals("27/05/2018",Utils.getDateFromEpoch(timeInMillis));
     }
 
         @Test
