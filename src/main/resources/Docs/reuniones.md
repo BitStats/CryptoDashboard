@@ -7,6 +7,7 @@
   - Resumen: En esta reunión se planeó lo que basicamente sería el proyecto, es decir un tablero que mostrara el flujo y tipo de cambio entre las criptomonedas más importantes, así como datos relevantes sobre ellas. También se decidieron los mecanismos que se implementarían para la visualización de estos datos, qué APIs y que herramientas.
 
   Estas fueron las dependencias que aprovecha el API de [binance](https://binance.com) para el correcto uso y visualización de los datos más importantes de las criptomonedas :
+  
     * Vaadin 8: Un framework que sirve para toda la parte del Frontend. Permite diseñar GUI en Java para Web usando GTW de Google (https://vaadin.com).
     * OKHTTP3: Es una librería que sirve para hacer las llamadas via REST por el protocolo HTTP/S, usada en el Backend para obtener la información desde el servidor de Binance.
     * dGraph: Es una librería que funciona de adaptador entre jqPlot (http://www.jqplot.com) y los Components de Vaadin, para hacer gráficas del Frontend.
